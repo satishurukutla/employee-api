@@ -1,0 +1,22 @@
+services:
+
+  backend:
+    build: ./dockerdemo
+
+    ports:
+      - "3000:3000"
+
+    # volumes:
+    #   - ./dockerdemo:/app
+
+  frontend:
+    build: ./frontends
+
+    ports:
+      - "3001:80"
+
+    volumes:
+      - ./frontends:/app
+
+    depends_on:
+      - backend
