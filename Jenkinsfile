@@ -1,5 +1,12 @@
+
 pipeline {
     agent any
+
+    environment {
+        DOCKER_USERNAME = "urukutlasatish123"
+        BACKEND_IMAGE = "urukutlasatish123/dockerdemo:latest"
+        FRONTEND_IMAGE = "urukutlasatish123/frontend:latest"
+    }
 
     stages {
 
@@ -12,7 +19,7 @@ pipeline {
         stage('Build Backend Image') {
             steps {
                 dir('dockerdemo') {
-                    sh 'docker build -t urukutlasatish123/dockerdemo:latest .'
+                    sh 'docker build -t $BACKEND_IMAGE .'
                 }
             }
         }
@@ -20,10 +27,46 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 dir('frontends') {
-                    sh 'docker build -t urukutlasatish123/frontend:latest .'
+                    sh 'docker build -t $FRONTEND_IMAGE .'
                 }
             }
         }
 
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub',
+                    usernameVariable: 'USERNAME',
+                    passwordVariable: 'PASSWORD'
+                )]) {
+                    sh '''
+                    echo $PASSWORD | docker login -u $USERNAME --password-stdin
+                    '''
+                }
+            }
+        }
+
+        stage('Push Backend Image') {
+            steps {
+                sh 'docker push $BACKEND_IMAGE'
+            }
+        }
+
+        stage('Push Frontend Image') {
+            steps {
+                sh 'docker push $FRONTEND_IMAGE'
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo 'Pipeline Completed Successfully'
+        }
+
+        failure {
+            echo 'Pipeline Failed'
+        }
     }
 }
