@@ -57,10 +57,10 @@ pipeline {
                 sh 'docker push $FRONTEND_IMAGE'
             }
         }
-        stage('Deploy') {
+    stage('Deploy') {
     steps {
-        bat 'scripts\\deploy.bat'
-      }
+        echo 'Deployment will be executed from host machine.'
+    }
 }
 }
 
