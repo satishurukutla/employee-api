@@ -57,12 +57,11 @@ pipeline {
                 sh 'docker push $FRONTEND_IMAGE'
             }
         }
-        stage('Deploy to Kubernetes') {
+        stage('Deploy') {
     steps {
-        sh '''
-        kubectl apply -f kubernetes/
-        '''
+        bat 'scripts\\deploy.bat'
     }
+}
 }
 
     }
