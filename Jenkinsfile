@@ -60,11 +60,11 @@ pipeline {
         stage('Deploy') {
     steps {
         bat 'scripts\\deploy.bat'
-    }
+      }
 }
 }
 
-    }
+    
 
     post {
         success {
