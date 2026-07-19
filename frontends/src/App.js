@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div>
-      <h1>Employees</h1>
+      <h1>Employees list </h1>
 
       {employees.map(emp => (
         <p key={emp.id}>{emp.name}</p>
